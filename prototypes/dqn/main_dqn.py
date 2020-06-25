@@ -10,13 +10,14 @@ from util import make_env, plot_learning_curve
 
 if __name__=='__main__':
     env = make_env('PongNoFrameskip-v4')
+    game = DoomGame()
     best_score = -np.inf
     load_checkpoint = False
     n_games = 500
     agent = DQNAgent(gamma=0.99, epsilon=1.0, lr=0.001, input_dims=(env.observation_space.shape),
-                    n_actions=env.action_space.n, mem_size=50000, eps_min=0.1,
+                    n_actions=game.get_available_buttons_size(), mem_size=50000, eps_min=0.1,
                     batch_size=32, replace=1000, eps_dec=1e-5, chkpoint_dir='models/',
-                    algo='DQNAgent',env_name='PongNoFrameskip-v4')
+                    algo='DQNAgent',env_name='Doom-E1M1')
     
     if load_checkpoint:
         agent.load_models()
@@ -31,8 +32,10 @@ if __name__=='__main__':
         done = False
         score = 0
         observation = env.reset()
+        game.new_episode()
 
-        while not done:
+        while not game.is_episode_finished():
+            action = agent.choose_action()
             action = agent.choose_action(observation)
             observation_, reward, done, info = env.step(action)
             score += reward
