@@ -14,7 +14,8 @@ if __name__=='__main__':
     best_score = -np.inf
     load_checkpoint = False
     n_games = 500
-    agent = DQNAgent(gamma=0.99, epsilon=1.0, lr=0.001, input_dims=(env.observation_space.shape),
+    resolution = (320, 240)
+    agent = DQNAgent(gamma=0.99, epsilon=1.0, lr=0.001, input_dims=(resolution.shape),
                     n_actions=game.get_available_buttons_size(), mem_size=50000, eps_min=0.1,
                     batch_size=32, replace=1000, eps_dec=1e-5, chkpoint_dir='models/',
                     algo='DQNAgent',env_name='Doom-E1M1')
