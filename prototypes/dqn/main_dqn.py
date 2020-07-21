@@ -6,16 +6,16 @@ from vizdoom import ScreenFormat
 from vizdoom import ScreenResolution
 
 from dqn_agent import DQNAgent
-from util import make_env, plot_learning_curve
+#from util import make_env, plot_learning_curve
 
 if __name__=='__main__':
-    env = make_env('PongNoFrameskip-v4')
+    #env = make_env('PongNoFrameskip-v4')
     game = DoomGame()
     best_score = -np.inf
     load_checkpoint = False
     n_games = 500
-    resolution = (320, 240)
-    agent = DQNAgent(gamma=0.99, epsilon=1.0, lr=0.001, input_dims=(resolution.shape),
+    resolution = 320*240
+    agent = DQNAgent(gamma=0.99, epsilon=1.0, lr=0.001, input_dims=resolution,
                     n_actions=game.get_available_buttons_size(), mem_size=50000, eps_min=0.1,
                     batch_size=32, replace=1000, eps_dec=1e-5, chkpoint_dir='models/',
                     algo='DQNAgent',env_name='Doom-E1M1')
@@ -60,4 +60,4 @@ if __name__=='__main__':
 
         eps_history.append(agent.epsilon)
 
-    plot_learning_curve(steps_array, scores, eps_history, figure_file)
+    #plot_learning_curve(steps_array, scores, eps_history, figure_file)
