@@ -1,24 +1,44 @@
+import os
 import numpy as np
-from vizdoom import DoomGame
-from vizdoom import Button
-from vizdoom import GameVariable
-from vizdoom import ScreenFormat
-from vizdoom import ScreenResolution
-
+from vizdoom import *
 from dqn_agent import DQNAgent
+import skimage.color, skimage.transform
+import itertools as it
 #from util import make_env, plot_learning_curve
 
-if __name__=='__main__':
-    #env = make_env('PongNoFrameskip-v4')
+config_file_path = '../../scenarios/simpler_basic.cfg'
+resolution = (30, 45)
+
+def initialize_vizdoom(config_file_path):
+    print("Initializing doom...")
     game = DoomGame()
+    game.load_config(config_file_path)
+    game.set_window_visible(False)
+    game.set_mode(Mode.PLAYER)
+    game.set_screen_format(ScreenFormat.GRAY8)
+    game.set_screen_resolution(ScreenResolution.RES_640X480)
+    game.init()
+    print("Doom initialized.")
+    return game
+
+def preprocess(img):
+    img = skimage.transform.resize(img, resolution)
+    img = img.astype(np.float32)
+    return img
+
+if __name__=='__main__':
+    
+    game = initialize_vizdoom(config_file_path)
+    
+    n = game.get_available_buttons_size()
+    actions = [list(a) for a in it.product([0, 1], repeat=n)]
     best_score = -np.inf
     load_checkpoint = False
     n_games = 500
-    resolution = 320*240
     agent = DQNAgent(gamma=0.99, epsilon=1.0, lr=0.001, input_dims=resolution,
-                    n_actions=game.get_available_buttons_size(), mem_size=50000, eps_min=0.1,
+                    n_actions=len(actions), mem_size=50000, eps_min=0.1,
                     batch_size=32, replace=1000, eps_dec=1e-5, chkpoint_dir='models/',
-                    algo='DQNAgent',env_name='Doom-E1M1')
+                    algo='DQNAgent',env_name='Doom-Basic')
     
     if load_checkpoint:
         agent.load_models()
@@ -32,11 +52,11 @@ if __name__=='__main__':
     for i in range(n_games):
         done = False
         score = 0
-        observation = env.reset()
+        #observation = env.reset()
         game.new_episode()
 
         while not game.is_episode_finished():
-            action = agent.choose_action()
+            observation = preprocess(game.get_state().screen_buffer)
             action = agent.choose_action(observation)
             observation_, reward, done, info = env.step(action)
             score += reward

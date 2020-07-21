@@ -8,18 +8,18 @@ import torch.optim as optim
 import os
 
 class DeepQNetwork(nn.Module):
-    def __init__(self, lr, name, n_actions, input_dims, chkpt_dir):
+    def __init__(self, lr, name, n_actions, chkpt_dir):
         super(DeepQNetwork, self).__init__()
         self.checkpoint_dir = chkpt_dir
         self.checkpoint_file = os.path.join(self.checkpoint_dir, name)
 
-        self.conv1 = nn.Conv2d(input_dims[0], 32, 8, stride=4)
-        self.conv2 = nn.Conv2d(32, 64, 4, stride=2)
-        self.conv3 = nn.Conv2d(64, 64, 3, stride=1)
+        self.conv1 = nn.Conv2d(1, 8, kernel_size=6, stride=3)
+        self.conv2 = nn.Conv2d(8, 8, kernel_size=3, stride=2)
+        #self.conv3 = nn.Conv2d(64, 64, 3, stride=1)
 
-        fc_input_dims = self.calculate_conv_output_dims(input_dims)
+        #fc_input_dims = self.calculate_conv_output_dims(input_dims)
 
-        self.fc1 = nn.Linear(fc_input_dims, 512)
+        self.fc1 = nn.Linear(192, 128)
         self.fc2 = nn.Linear(512, n_actions)
 
         self.optimizer = optim.RMSprop(self.parameters(), lr=lr)
@@ -38,9 +38,9 @@ class DeepQNetwork(nn.Module):
     def forward(self, state):
         conv1 = F.relu(self.conv1(state))
         conv2 = F.relu(self.conv2(conv1))
-        conv3 = F.relu(self.conv3(conv2))
+        #conv3 = F.relu(self.conv3(conv2))
 
-        conv_state = conv3.view(conv3.size()[0], -1)
+        conv_state = conv3.view(conv2.size()[0], -1)
         flat1 = F.relu(self.fc1(conv_state))
         actions = self.fc2(flat1)
 

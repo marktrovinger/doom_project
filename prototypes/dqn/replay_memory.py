@@ -1,14 +1,14 @@
 import numpy as np
 
 class ReplayBuffer():
-    def __init__(self, max_size, input_shape, n_actions):
+    def __init__(self, max_size, input_shape):
         self.memory_size = max_size
         self.memory_counter = 0
         self.state_memory = np.zeros((self.memory_size, *input_shape), dtype=np.float32)
         self.new_state_memory = np.zeros((self.memory_size, *input_shape), dtype=np.float32)
-        self.action_memory = np.zeros(self.memory_size,  dtype=np.int64)
+        self.action_memory = np.zeros(self.memory_size,  dtype=np.int32)
         self.reward_memory = np.zeros(self.memory_size,  dtype=np.float32)
-        self.terminal_memory = np.zeros(self.memory_size,  dtype=np.uint8)
+        self.terminal_memory = np.zeros(self.memory_size,  dtype=np.float32)
 
     def store_transistion(self, state, action, reward, state_, done):
         index = self.memory_counter % self.memory_size

@@ -22,11 +22,11 @@ class DQNAgent():
         self.chkpoint_dir = chkpoint_dir
         self.algo = algo
         self.learn_step_counter = 0
-        self.memory = ReplayBuffer(mem_size, input_dims, n_actions)
+        self.memory = ReplayBuffer(mem_size, input_dims)
 
-        self.q_eval = DeepQNetwork(input_dims = self.input_dims, lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir, name=self.env_name+'_'+self.algo+'_q_eval')
+        self.q_eval = DeepQNetwork(lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir, name=self.env_name+'_'+self.algo+'_q_eval')
 
-        self.q_next = DeepQNetwork(input_dims = self.input_dims, lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir, name=self.env_name+'_'+self.algo+'_q_next')
+        self.q_next = DeepQNetwork(lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir, name=self.env_name+'_'+self.algo+'_q_next')
 
     def choose_action(self, observation):
         if np.random.random() > self.epsilon:
@@ -49,7 +49,6 @@ class DQNAgent():
         dones = T.tensor(done).to(self.q_eval.device)
         actions = T.tensor(action).to(self.q_eval.device)
         states_ = T.tensor(new_state).to(self.q_eval.device)
-        print(actions.dtype)
 
         return states, rewards, dones, actions, states_
 
@@ -78,9 +77,6 @@ class DQNAgent():
 
         states, rewards, dones, actions, states_ = self.sample_memory()
         indices = np.arange(self.batch_size)
-
-        print(actions.dtype)
-        print(indices.dtype)
 
         q_pred = self.q_eval.forward(states)[indices, actions]
         q_next = self.q_next.forward(states_).max(dim=1)[0]
