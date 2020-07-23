@@ -38,9 +38,8 @@ class DeepQNetwork(nn.Module):
     def forward(self, state):
         conv1 = F.relu(self.conv1(state))
         conv2 = F.relu(self.conv2(conv1))
-        #conv3 = F.relu(self.conv3(conv2))
 
-        conv_state = conv3.view(conv2.size()[0], -1)
+        conv_state = conv2.view(-1, 192)
         flat1 = F.relu(self.fc1(conv_state))
         actions = self.fc2(flat1)
 

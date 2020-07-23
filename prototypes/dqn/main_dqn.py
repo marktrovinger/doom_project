@@ -36,8 +36,8 @@ if __name__=='__main__':
     load_checkpoint = False
     n_games = 500
     agent = DQNAgent(gamma=0.99, epsilon=1.0, lr=0.001, input_dims=resolution,
-                    n_actions=len(actions), mem_size=50000, eps_min=0.1,
-                    batch_size=32, replace=1000, eps_dec=1e-5, chkpoint_dir='models/',
+                    n_actions=len(actions), mem_size=10000, eps_min=0.1,
+                    batch_size=64, replace=1000, eps_dec=1e-5, chkpoint_dir='models/',
                     algo='DQNAgent',env_name='Doom-Basic')
     
     if load_checkpoint:
@@ -57,8 +57,11 @@ if __name__=='__main__':
 
         while not game.is_episode_finished():
             observation = preprocess(game.get_state().screen_buffer)
+            #observation.append(0, )
             action = agent.choose_action(observation)
-            observation_, reward, done, info = env.step(action)
+            reward = game.make_action(actions[action])
+            done = game.is_episode_finished()
+            observation_ = preprocess(game.get_state().screen_buffer) if not done else None
             score += reward
 
             if not load_checkpoint:

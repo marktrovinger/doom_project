@@ -24,9 +24,11 @@ class DQNAgent():
         self.learn_step_counter = 0
         self.memory = ReplayBuffer(mem_size, input_dims)
 
-        self.q_eval = DeepQNetwork(lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir, name=self.env_name+'_'+self.algo+'_q_eval')
+        self.q_eval = DeepQNetwork(lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir,
+                                    name=self.env_name+'_'+self.algo+'_q_eval')
 
-        self.q_next = DeepQNetwork(lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir, name=self.env_name+'_'+self.algo+'_q_next')
+        self.q_next = DeepQNetwork(lr = self.lr, n_actions = self.n_actions, chkpt_dir=self.chkpoint_dir, 
+                                    name=self.env_name+'_'+self.algo+'_q_next')
 
     def choose_action(self, observation):
         if np.random.random() > self.epsilon:
@@ -77,6 +79,8 @@ class DQNAgent():
 
         states, rewards, dones, actions, states_ = self.sample_memory()
         indices = np.arange(self.batch_size)
+
+        print('actions: ', actions)
 
         q_pred = self.q_eval.forward(states)[indices, actions]
         q_next = self.q_next.forward(states_).max(dim=1)[0]
