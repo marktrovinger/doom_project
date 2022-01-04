@@ -41,8 +41,7 @@ if __name__=='__main__':
         steps_array.append(n_steps)
 
         avg_score = np.mean(scores[-100:])
-        print('episode ', i, 'score: ', score, 'average score %.1f best score %.1f epsilon %.2f' % (avg_score, best_score, agent.epsilon), 
-            'steps ', n_steps)
+        print(f'episode : {i} score: {score}, average score: {avg_score:.1f} best score: {best_score:.1f} steps: {n_steps}') 
 
         if avg_score > best_score:
             if not load_checkpoint:
