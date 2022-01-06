@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amscd, amsthm, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+\graphicspath{ {../plots/} }
+
+\lstdefinestyle{BashInputStyle}{
+	language=bash,
+	basicstyle=\small\sffamily,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=3pt,
+	frame=tb,
+	columns=fullflexible,
+	backgroundcolor=\color{yellow!20},
+	linewidth=\linewidth,
+	xleftmargin=0.1\linewidth
+}
+
+\oddsidemargin 0pt
+\evensidemargin 0pt
+\marginparwidth 40pt
+\marginparsep 10pt
+\topmargin -20pt
+\headsep 10pt
+\textheight 8.7in
+\textwidth 6.65in
+\linespread{1.2}
+
+
+
+% Title Page
+\title{Reinforcement Learning Environments and Agents for Single-Player FPS Games}
+\author{Mark Trovinger}
+\begin{document}
+	\maketitle
+\begin{abstract}
+	Recent advancements in deep reinforcement learning have been applied to a wide range of games; from Atari based games in the earliest works, to more modern titles like StarCraft II: Wings of Liberty. Exploration of the game environments in first person shooters (FPS) have focused primarily upon multiplayer environments. There remains an open question as to the best approach to solving a single-player environment, where there are more varied options for interaction, and navigation is typically more challenging. In this paper, we will explore both the creation of a suitable environment to test agents, as well as approaches to training an agent to succeed in this type of environment. The work will utilize the ViZDoom library for environment creation, and will build upon existing work in deep reinforcement learning in agent creation. 
+\end{abstract}
+\end{document} 
+
