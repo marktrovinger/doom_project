@@ -1,0 +1,85 @@
+diff --git a/experiments/comparison/algo_comparison.py b/experiments/comparison/algo_comparison.py
+index 103d794..eeb537f 100644
+--- a/experiments/comparison/algo_comparison.py
++++ b/experiments/comparison/algo_comparison.py
+@@ -1,12 +1,59 @@
+ # imports, don't forget wandb
+ import numpy as np
++
++
+ from stable_baselines3 import DQN, PPO
++from stable_baselines3.common.vec_env import DummyVecEnv, VecVideoRecorder, VecFrameStack
++from stable_baselines3.common.monitor import Monitor
++from stable_baselines3.common.atari_wrappers import WarpFrame
++
++import wandb
++from wandb.integration.sb3 import WandbCallback
++
++import gym
++import vizdoomgym
++
++config = {
++        "policy_type": 'CnnPolicy',
++        "env_name": 'VizdoomBasic-v0',
++        "total_timesteps": 250000
++        }
++# main comparison, investigate how many timesteps are needed, probably close
++# to 2M, but have to read some papers first
++
+ 
++run = wandb.init(
++    project="doom",
++    config=config,
++    sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
++    monitor_gym=True,  # auto-upload the videos of agents playing the game
++    save_code=True,  # optional
++)
++# arg parse
++def parse_args():
++    pass
+ 
+ 
++def make_env():
++    env = gym.make(config['env_name'])
++    env = Monitor(env)
++    env = WarpFrame(env)
++    env = VecFrameStack(env, 4, "last")
++    return env
+ 
+-# main comparison, investigate how many timesteps are needed
++env = DummyVecEnv([make_env])
++env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
+ 
++model = DQN(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
++model.learn(
++        total_timesteps=config["total_timesteps"],
++        callback=WandbCallback(
++        gradient_save_freq=100,
++        model_save_path=f"models/{run.id}",
++        verbose=2,
++    ),
++)
++run.finish()
+ # write results to wand for that run
+ 
+ # save model if performance is better
+diff --git a/poster/abstract.tex b/poster/abstract.tex
+index 77c835c..fdb2544 100644
+--- a/poster/abstract.tex
++++ b/poster/abstract.tex
+@@ -35,12 +35,13 @@
+ 
+ 
+ % Title Page
+-\title{Reinforcement Learning Environments and Agents for Single-Player FPS Games}
++\title{Training an Agent to Discover Secrets using Auxiliary Tasks}
+ \author{Mark Trovinger}
+ \begin{document}
+ 	\maketitle
+ \begin{abstract}
+-	Recent advancements in deep reinforcement learning have been applied to a wide range of games; from Atari based games in the earliest works, to more modern titles like StarCraft II: Wings of Liberty. Exploration of the game environments in first person shooters (FPS) have focused primarily upon multiplayer environments. There remains an open question as to the best approach to solving a single-player environment, where there are more varied options for interaction, and navigation is typically more challenging. In this paper, we will explore both the creation of a suitable environment to test agents, as well as approaches to training an agent to succeed in this type of environment. The work will utilize the ViZDoom library for environment creation, and will build upon existing work in deep reinforcement learning in agent creation. 
++	Hidden rewards have long been a component in game design, as a reward for a player's ingenuity. Deep reinforcement learning agents have been trained to perform a wide variety of tasks in the context of first-person shooter games, in this instance, Doom. Utilizing the intrinsic rewards found in optional tasks within the game space, we trained an agent that could successfully complete these tasks, taking advantage of recent advancements in computer vision.
++	
+ \end{abstract}
+ \end{document} 
+ 
