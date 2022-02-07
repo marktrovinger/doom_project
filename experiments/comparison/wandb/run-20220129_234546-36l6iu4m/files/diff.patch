@@ -1,0 +1,22 @@
+diff --git a/experiments/comparison/algo_comparison.py b/experiments/comparison/algo_comparison.py
+index c355656..8ac52e8 100644
+--- a/experiments/comparison/algo_comparison.py
++++ b/experiments/comparison/algo_comparison.py
+@@ -16,7 +16,7 @@ import vizdoomgym
+ config = {
+         "policy_type": 'CnnPolicy',
+         "env_name": 'VizdoomBasic-v0',
+-        "total_timesteps": 250000
++        "total_timesteps": 500000
+         }
+ # main comparison, investigate how many timesteps are needed, probably close
+ # to 2M, but have to read some papers first
+diff --git a/experiments/comparison/wandb/latest-run b/experiments/comparison/wandb/latest-run
+index 2dff084..e6b8688 120000
+--- a/experiments/comparison/wandb/latest-run
++++ b/experiments/comparison/wandb/latest-run
+@@ -1 +1 @@
+-run-20220129_195641-2guengwt
+\ No newline at end of file
++run-20220129_234546-36l6iu4m
+\ No newline at end of file

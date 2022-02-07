@@ -16,7 +16,7 @@ import vizdoomgym
 config = {
         "policy_type": 'CnnPolicy',
         "env_name": 'VizdoomBasic-v0',
-        "total_timesteps": 250000
+        "total_timesteps": 500000
         }
 # main comparison, investigate how many timesteps are needed, probably close
 # to 2M, but have to read some papers first
