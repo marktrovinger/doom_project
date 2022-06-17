@@ -40,7 +40,6 @@ def make_env():
     env = WarpFrame(env)
     return env
 
-
 env = DummyVecEnv([make_env])
 env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
 env = VecFrameStack(env, 4, "last")

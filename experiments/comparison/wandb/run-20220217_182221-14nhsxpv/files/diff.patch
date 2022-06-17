@@ -1,0 +1,26 @@
+diff --git a/experiments/comparison/algo_comparison.py b/experiments/comparison/algo_comparison.py
+index 8ac52e8..675e29e 100644
+--- a/experiments/comparison/algo_comparison.py
++++ b/experiments/comparison/algo_comparison.py
+@@ -40,9 +40,9 @@ def make_env():
+     env = WarpFrame(env)
+     return env
+ 
+-env = make_env()
+-env = DummyVecEnv([lambda: env])
+-###env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
++
++env = DummyVecEnv([make_env])
++env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
+ env = VecFrameStack(env, 4, "last")
+ 
+ model = PPO(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
+diff --git a/experiments/comparison/wandb/latest-run b/experiments/comparison/wandb/latest-run
+index e6b8688..6284768 120000
+--- a/experiments/comparison/wandb/latest-run
++++ b/experiments/comparison/wandb/latest-run
+@@ -1 +1 @@
+-run-20220129_234546-36l6iu4m
+\ No newline at end of file
++run-20220217_182221-14nhsxpv
+\ No newline at end of file

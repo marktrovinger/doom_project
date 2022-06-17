@@ -1,0 +1,24 @@
+{
+    "os": "Linux-5.11.0-49-generic-x86_64-with-glibc2.17",
+    "python": "3.8.12",
+    "heartbeatAt": "2022-02-17T21:05:37.602804",
+    "startedAt": "2022-02-17T21:05:36.354577",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 2060",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "algo_comparison.py",
+    "codePath": "experiments/comparison/algo_comparison.py",
+    "git": {
+        "remote": "git@github.com:marktrovinger/doom_project.git",
+        "commit": "dbcfcb0fb016483fe750bf76572f263904e6a728"
+    },
+    "email": "mark.trovinger@gmail.com",
+    "root": "/home/marktrovinger/Projects/doom_project",
+    "host": "linuxbox",
+    "username": "marktrovinger",
+    "executable": "/home/marktrovinger/miniconda3/envs/vizdoom/bin/python"
+}
