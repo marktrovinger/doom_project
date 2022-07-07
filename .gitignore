@@ -131,3 +131,6 @@ dmypy.json
 # Project dirs
 /wads
 /scenarios
+
+macOS
+.DS_Store
