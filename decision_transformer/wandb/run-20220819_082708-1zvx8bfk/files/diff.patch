@@ -1,0 +1,38 @@
+diff --git a/experiments/comparison/algo_comparison.py b/experiments/comparison/algo_comparison.py
+index 675e29e..52b7adb 100644
+--- a/experiments/comparison/algo_comparison.py
++++ b/experiments/comparison/algo_comparison.py
+@@ -41,11 +41,12 @@ def make_env():
+     return env
+ 
+ 
+-env = DummyVecEnv([make_env])
+-env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
++#env = DummyVecEnv([make_env])
++env = make_env()
++#env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
+ env = VecFrameStack(env, 4, "last")
+ 
+-model = PPO(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
++model = DQN(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
+ # model = DQN(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
+ model.learn(
+         total_timesteps=config["total_timesteps"],
+@@ -55,6 +56,8 @@ model.learn(
+         verbose=2,
+     ),
+ )
++model.save_replay_buffer()
++
+ run.finish()
+ # write results to wand for that run
+ 
+diff --git a/experiments/comparison/wandb/latest-run b/experiments/comparison/wandb/latest-run
+index 361899b..930e71f 120000
+--- a/experiments/comparison/wandb/latest-run
++++ b/experiments/comparison/wandb/latest-run
+@@ -1 +1 @@
+-run-20220217_182536-1l7y7xev
+\ No newline at end of file
++run-20220805_161506-h8whpc51
+\ No newline at end of file
