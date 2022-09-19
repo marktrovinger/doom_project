@@ -1,0 +1,24 @@
+{
+    "os": "Linux-5.15.0-47-generic-x86_64-with-glibc2.17",
+    "python": "3.8.12",
+    "heartbeatAt": "2022-09-19T10:22:01.198699",
+    "startedAt": "2022-09-19T10:22:00.060780",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3080 Ti",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "generate_dataset.py",
+    "codePath": "decision_transformer/generate_dataset.py",
+    "git": {
+        "remote": "git@github.com:marktrovinger/doom_project.git",
+        "commit": "138f88287d7fd1507636cfaffd97d21bfba79831"
+    },
+    "email": "mark.trovinger@gmail.com",
+    "root": "/home/marktrovinger/Projects/doom_project",
+    "host": "linuxbox",
+    "username": "marktrovinger",
+    "executable": "/home/marktrovinger/miniconda3/envs/vizdoom/bin/python"
+}

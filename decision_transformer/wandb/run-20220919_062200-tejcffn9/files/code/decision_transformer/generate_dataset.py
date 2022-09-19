@@ -11,7 +11,7 @@ import wandb
 from wandb.integration.sb3 import WandbCallback
 
 import gym
-import vizdoomgym.gym_wrapper
+import vizdoomgym
 
 config = {
         "policy_type": 'CnnPolicy',
@@ -42,7 +42,6 @@ def make_env():
     return env
 
 def main():
-    
     env = make_env()
     #env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
     env = VecFrameStack(env, 4, "last")

@@ -11,7 +11,7 @@ import wandb
 from wandb.integration.sb3 import WandbCallback
 
 import gym
-import vizdoomgym.gym_wrapper
+import vizdoomgym
 
 config = {
         "policy_type": 'CnnPolicy',
@@ -41,8 +41,7 @@ def make_env():
     env = WarpFrame(env)
     return env
 
-def main():
-    
+if __name__ == '__main__':
     env = make_env()
     #env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
     env = VecFrameStack(env, 4, "last")
@@ -61,6 +60,3 @@ def main():
     model.save_replay_buffer(f"./dataset/dqn_replay/{config['env_name']}")
 
     run.finish()
-
-if __name__ == '__main__':
-    main()

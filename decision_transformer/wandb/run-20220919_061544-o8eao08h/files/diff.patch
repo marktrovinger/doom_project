@@ -1,0 +1,57 @@
+diff --git a/decision_transformer/generate_dataset.py b/decision_transformer/generate_dataset.py
+index 9216dc3..df38d89 100644
+--- a/decision_transformer/generate_dataset.py
++++ b/decision_transformer/generate_dataset.py
+@@ -41,22 +41,22 @@ def make_env():
+     env = WarpFrame(env)
+     return env
+ 
+-
+-env = make_env()
+-#env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
+-env = VecFrameStack(env, 4, "last")
+-
+-
+-#model = PPO(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
+-model = DQN(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
+-model.learn(
+-        total_timesteps=config["total_timesteps"],
+-        callback=WandbCallback(
+-        gradient_save_freq=100,
+-        model_save_path=f"models/{run.id}",
+-        verbose=2,
+-    ),
+-)
+-model.save_replay_buffer(f"./dataset/dqn_replay/{config['env_name']}")
+-
+-run.finish()
+\ No newline at end of file
++if __name__ == '__main__':
++    env = make_env()
++    #env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
++    env = VecFrameStack(env, 4, "last")
++
++
++    #model = PPO(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
++    model = DQN(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
++    model.learn(
++            total_timesteps=config["total_timesteps"],
++            callback=WandbCallback(
++            gradient_save_freq=100,
++            model_save_path=f"models/{run.id}",
++            verbose=2,
++        ),
++    )
++    model.save_replay_buffer(f"./dataset/dqn_replay/{config['env_name']}")
++
++    run.finish()
+\ No newline at end of file
+diff --git a/decision_transformer/wandb/latest-run b/decision_transformer/wandb/latest-run
+index 454c9c8..b6a3c6a 120000
+--- a/decision_transformer/wandb/latest-run
++++ b/decision_transformer/wandb/latest-run
+@@ -1 +1 @@
+-run-20220819_091603-2owmow5j
+\ No newline at end of file
++run-20220919_061544-o8eao08h
+\ No newline at end of file
