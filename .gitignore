@@ -132,5 +132,6 @@ dmypy.json
 /wads
 /scenarios
 
-macOS
+
+# macOS
 .DS_Store
