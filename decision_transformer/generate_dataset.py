@@ -1,7 +1,7 @@
 import numpy as np
 
 
-from stable_baselines3 import DQN, PPO
+from stable_baselines3 import DQN 
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecVideoRecorder, VecFrameStack
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.monitor import Monitor
@@ -19,8 +19,6 @@ config = {
         "total_timesteps": 10000,
         "num_cpu": 6
         }
-# main comparison, investigate how many timesteps are needed, probably close
-# to 2M, but have to read some papers first
 
 
 run = wandb.init(
