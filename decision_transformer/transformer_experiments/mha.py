@@ -50,3 +50,6 @@ class MultiHeadAttention(nn.Module):
 
             outputs_per_head.append(output)
             attn_per_head.append(attn)
+
+        output = torch.cat(outputs_per_head, -1)
+
