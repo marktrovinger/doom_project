@@ -1,0 +1,34 @@
+diff --git a/decision_transformer/generate_dataset.py b/decision_transformer/generate_dataset.py
+index ff23d33..0bb3e31 100644
+--- a/decision_transformer/generate_dataset.py
++++ b/decision_transformer/generate_dataset.py
+@@ -11,7 +11,7 @@ import wandb
+ from wandb.integration.sb3 import WandbCallback
+ 
+ import gym
+-import vizdoomgym.gym_wrapper
++from vizdoom import gym_wrapper
+ 
+ config = {
+         "policy_type": 'CnnPolicy',
+@@ -34,9 +34,9 @@ def parse_args():
+ 
+ 
+ def make_env():
+-    env = make_vec_env(config['env_name'], n_envs=config['num_cpu'], seed=0, vec_env_cls=SubprocVecEnv)
++    env = gym.make(config["env_name"])
+     env = Monitor(env)
+-    env = WarpFrame(env)
++    #env = WarpFrame(env)
+     return env
+ 
+ def main():
+diff --git a/decision_transformer/wandb/latest-run b/decision_transformer/wandb/latest-run
+index 822fba3..f37671f 120000
+--- a/decision_transformer/wandb/latest-run
++++ b/decision_transformer/wandb/latest-run
+@@ -1 +1 @@
+-run-20220919_062206-4dpinmno
+\ No newline at end of file
++run-20230130_120840-2rrstn9e
+\ No newline at end of file

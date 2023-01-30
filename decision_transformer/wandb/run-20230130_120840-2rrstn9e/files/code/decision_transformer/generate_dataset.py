@@ -11,7 +11,6 @@ import wandb
 from wandb.integration.sb3 import WandbCallback
 
 import gym
-from gym.wrappers import FrameStack
 from vizdoom import gym_wrapper
 
 config = {
@@ -37,13 +36,15 @@ def parse_args():
 def make_env():
     env = gym.make(config["env_name"])
     env = Monitor(env)
-    env = FrameStack(env, num_stack=4, lz4_compress=True)
+    #env = WarpFrame(env)
     return env
 
 def main():
     
     env = make_env()
     #env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
+    env = VecFrameStack(env, 4, "last")
+
 
     #model = PPO(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
     model = DQN(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")

@@ -1,0 +1,105 @@
+{
+    "os": "Linux-5.15.0-58-generic-x86_64-with-glibc2.17",
+    "python": "3.8.12",
+    "heartbeatAt": "2023-01-30T17:08:41.144239",
+    "startedAt": "2023-01-30T17:08:40.515913",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "generate_dataset.py",
+    "codePath": "decision_transformer/generate_dataset.py",
+    "git": {
+        "remote": "git@github.com:marktrovinger/doom_project.git",
+        "commit": "8a8556182251da410529b0394c5deb0a8ed7d7cf"
+    },
+    "email": "mark.trovinger@gmail.com",
+    "root": "/home/marktrovinger/Projects/doom_project",
+    "host": "linuxbox",
+    "username": "marktrovinger",
+    "executable": "/home/marktrovinger/miniconda3/envs/vizdoom/bin/python",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 1915.4963333333333,
+        "min": 1550.0,
+        "max": 3400.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 2836.275,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1549.681,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 2800.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 3400.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        },
+        {
+            "current": 1550.0,
+            "min": 1550.0,
+            "max": 3400.0
+        }
+    ],
+    "disk": {
+        "total": 456.8854446411133,
+        "used": 286.2370262145996
+    },
+    "gpu": "NVIDIA GeForce RTX 3080 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3080 Ti",
+            "memory_total": 12884901888
+        }
+    ],
+    "memory": {
+        "total": 31.29800033569336
+    }
+}

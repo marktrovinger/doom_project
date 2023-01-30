@@ -1,0 +1,43 @@
+diff --git a/decision_transformer/generate_dataset.py b/decision_transformer/generate_dataset.py
+index ff23d33..af3a9fd 100644
+--- a/decision_transformer/generate_dataset.py
++++ b/decision_transformer/generate_dataset.py
+@@ -11,7 +11,8 @@ import wandb
+ from wandb.integration.sb3 import WandbCallback
+ 
+ import gym
+-import vizdoomgym.gym_wrapper
++from gym.wrappers import FrameStack
++from vizdoom import gym_wrapper
+ 
+ config = {
+         "policy_type": 'CnnPolicy',
+@@ -34,17 +35,15 @@ def parse_args():
+ 
+ 
+ def make_env():
+-    env = make_vec_env(config['env_name'], n_envs=config['num_cpu'], seed=0, vec_env_cls=SubprocVecEnv)
++    env = gym.make(config["env_name"])
+     env = Monitor(env)
+-    env = WarpFrame(env)
++    env = FrameStack(env, num_stack=4, lz4_compress=True)
+     return env
+ 
+ def main():
+     
+     env = make_env()
+     #env = VecVideoRecorder(env, f"videos/{run.id}", record_video_trigger=lambda x: x % 2000 == 0, video_length=200)
+-    env = VecFrameStack(env, 4, "last")
+-
+ 
+     #model = PPO(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
+     model = DQN(config["policy_type"], env, verbose=1, tensorboard_log=f"runs/{run.id}")
+diff --git a/decision_transformer/wandb/latest-run b/decision_transformer/wandb/latest-run
+index 822fba3..118cb67 120000
+--- a/decision_transformer/wandb/latest-run
++++ b/decision_transformer/wandb/latest-run
+@@ -1 +1 @@
+-run-20220919_062206-4dpinmno
+\ No newline at end of file
++run-20230130_125410-3e43g9xb
+\ No newline at end of file
