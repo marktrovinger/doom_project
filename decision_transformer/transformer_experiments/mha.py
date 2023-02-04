@@ -52,4 +52,9 @@ class MultiHeadAttention(nn.Module):
             attn_per_head.append(attn)
 
         output = torch.cat(outputs_per_head, -1)
+        attn_weights = torch.stack(attn_per_head).permute(1, 0, 2, 3)
+
+        projection = torch.dropout(self.mha_linear(output))
+
+        return projection, attn_weights
 
