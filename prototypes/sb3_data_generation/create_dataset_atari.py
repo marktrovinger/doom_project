@@ -10,6 +10,7 @@ import torch
 import pickle
 from atari.fixed_replay_buffer import FixedReplayBuffer
 
+# PMMOD: soft-coding the buffer file size
 replay_buffer_capacity = 10000
 
 def create_dataset(num_buffers, num_steps, game, data_dir_prefix, trajectories_per_buffer):
@@ -23,15 +24,14 @@ def create_dataset(num_buffers, num_steps, game, data_dir_prefix, trajectories_p
     transitions_per_buffer = np.zeros(50, dtype=int)
     num_trajectories = 0
     while len(obss) < num_steps:
+        # PMMOD - I don't understand how this works...
         # buffer_num = np.random.choice(np.arange(50 - num_buffers, 50), 1)[0]  # randomly select a buffer to load
-        # PMMOD - to start, let's just choose one!
-        buffer_num = np.random.choice(np.arange(num_buffers), 1)[0]  # randomly select a buffer to load  # randomly select a
-        # buffer to load
+        buffer_num = np.random.choice(np.arange(num_buffers), 1)[0]  # randomly select a buffer to load
         i = transitions_per_buffer[buffer_num]
         print('loading from buffer %d which has %d already loaded' % (buffer_num, i))
         frb = FixedReplayBuffer(
             # data_dir=data_dir_prefix + game + '/1/replay_logs',
-            data_dir=f"{data_dir_prefix}",
+            data_dir=f"{data_dir_prefix}",  # PMMOD: removed the +game+'/1/replay_logs'
             replay_suffix=buffer_num,
             observation_shape=(84, 84),
             stack_size=4,
@@ -39,7 +39,7 @@ def create_dataset(num_buffers, num_steps, game, data_dir_prefix, trajectories_p
             gamma=0.99,
             observation_dtype=np.uint8,
             batch_size=32,
-            replay_capacity=replay_buffer_capacity)
+            replay_capacity=replay_buffer_capacity)  # PMMOD - added new param for replay buffer size
         if frb._loaded_buffers:
             done = False
             curr_num_transitions = len(obss)
@@ -59,7 +59,7 @@ def create_dataset(num_buffers, num_steps, game, data_dir_prefix, trajectories_p
                         trajectories_to_load -= 1
                 returns[-1] += ret[0]
                 i += 1
-                if i >= replay_buffer_capacity:
+                if i >= replay_buffer_capacity:  # PMMOD - added new param for replay buffer size
                     obss = obss[:curr_num_transitions]
                     actions = actions[:curr_num_transitions]
                     stepwise_returns = stepwise_returns[:curr_num_transitions]
@@ -98,8 +98,8 @@ def create_dataset(num_buffers, num_steps, game, data_dir_prefix, trajectories_p
 
     return obss, actions, returns, done_idxs, rtg, timesteps
 
-# using data stored in /Users/perusha/tensorboard/DT_dataset/atari
-
+# To test upload, uncomment below.
+# using data stored in /Users/perusha/tensorboard/DT_dataset/atari_9Feb/
 # create_dataset(num_buffers=10, num_steps=10000, game=None,
 #                data_dir_prefix='/Users/perusha/tensorboard/DT_dataset/atari_9Feb/',
 #                trajectories_per_buffer=10)

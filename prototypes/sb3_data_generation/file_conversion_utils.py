@@ -10,16 +10,6 @@ import shutil
 2. Need to gz files
 '''
 
-def generate_missing_files_dt(folder):
-    # create add_count files for DT
-    for i in range(5):
-        obs = np.load(f"{folder}$store$_observation_ckpt_{i}.npy")
-        np.save(f"{folder}add_count_ckpt.{i}", np.array(len(obs)))
-
-    # create invalid range files for DT - used for the stacking of frames process. Currently just blank...
-    for i in range(5):
-        np.save(f"{folder}invalid_range_ckpt.{i}", np.array([]))
-
 def read_folder(path, search_str):
     files = [f for f in glob.glob(path + search_str, recursive=False)]
     return files
@@ -43,7 +33,6 @@ def gzip_files(folder):
             with gzip.open(f"{file}.gz", 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
-folder = '/Users/perusha/tensorboard/DT_dataset/2/'
 folder = '/Users/perusha/tensorboard/DT_dataset/atari_7Feb/'
 folder = '/Users/perusha/tensorboard/DT_dataset/atari_9Feb/'
 strip_file_extension(folder)
