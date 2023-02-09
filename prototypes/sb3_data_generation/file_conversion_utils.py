@@ -33,7 +33,7 @@ def gzip_files(folder):
             with gzip.open(f"{file}.gz", 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
-folder = '/Users/perusha/tensorboard/DT_dataset/atari_7Feb/'
-folder = '/Users/perusha/tensorboard/DT_dataset/atari_9Feb/'
-strip_file_extension(folder)
-gzip_files(folder)
+# folder = '/Users/perusha/tensorboard/DT_dataset/atari_7Feb/'
+# folder = '/Users/perusha/tensorboard/DT_dataset/atari_9Feb/'
+# strip_file_extension(folder)
+# gzip_files(folder)
