@@ -23,9 +23,9 @@ tf.train.RMSPropOptimizer.momentum = 0.0
 tf.train.RMSPropOptimizer.epsilon = 0.00001
 tf.train.RMSPropOptimizer.centered = True
 
-atari_lib.create_atari_environment.game_name = 'VizdoomHealthGatheringSupreme-v0'
+vizdoom_lib.create_vizdoom_environment.game_name = 'VizdoomHealthGatheringSupreme-v0'
 # Deterministic ALE version used in the DQN Nature paper (Mnih et al., 2015).
-atari_lib.create_atari_environment.sticky_actions = False
+vizdoom_lib.create_vizdoom_environment.sticky_actions = False
 create_agent.agent_name = 'dqn'
 Runner.num_iterations = 200
 Runner.training_steps = 250000  # agent steps

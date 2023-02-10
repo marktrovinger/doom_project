@@ -36,7 +36,7 @@ Network types are namedtuples that define the output signature of the networks
 used. Please use the appropriate signature as needed when defining new networks.
 """
 
-# Copied from atari_lib for Vizdoom
+# Copied from atari_lib for Vizdoom; caused ambiguity so modified the original atari_lib instead...
 
 
 from __future__ import absolute_import
@@ -95,6 +95,7 @@ def create_vizdoom_environment(game_name=None, sticky_actions=True):
     """
     assert game_name is not None
     game_version = 'v0' if sticky_actions else 'v4'
+    # full_game_name = '{}NoFrameskip-{}'.format(game_name, game_version)
     full_game_name = '{}-{}'.format(game_name, game_version)
     env = gym.make(full_game_name)
     # Strip out the TimeLimit wrapper from Gym, which caps us at 100k frames. We
@@ -375,7 +376,7 @@ class AtariPreprocessing(object):
         self.frame_skip = frame_skip
         self.screen_size = screen_size
 
-        obs_dims = self.environment.observation_space
+        obs_dims = self.environment.observation_space['screen']
         # Stores temporary observations used for pooling over two successive
         # frames.
         self.screen_buffer = [
@@ -416,7 +417,8 @@ class AtariPreprocessing(object):
             environment.
         """
         self.environment.reset()
-        self.lives = self.environment.ale.lives()
+        # self.lives = self.environment.ale.lives()
+        self.lives = 1  # PMMOD where does this come from??
         self._fetch_grayscale_observation(self.screen_buffer[0])
         self.screen_buffer[1].fill(0)
         return self._pool_and_resize()
@@ -464,11 +466,12 @@ class AtariPreprocessing(object):
         for time_step in range(self.frame_skip):
             # We bypass the Gym observation altogether and directly fetch the
             # grayscale image from the ALE. This is a little faster.
-            _, reward, game_over, info = self.environment.step(action)
+            _, reward, game_over,_, info = self.environment.step(action)
             accumulated_reward += reward
 
             if self.terminal_on_life_loss:
-                new_lives = self.environment.ale.lives()
+                # new_lives = self.environment.ale.lives()
+                new_lives = 1  # PMMOD this again...
                 is_terminal = game_over or new_lives < self.lives
                 self.lives = new_lives
             else:
@@ -499,7 +502,10 @@ class AtariPreprocessing(object):
         Returns:
           observation: numpy array, the current observation in grayscale.
         """
-        self.environment.ale.getScreenGrayscale(output)
+        # self.environment.ale.getScreenGrayscale(output)
+        # Copied from https://github.com/KatyNTsachi/Hierarchical-RL/commit/40e995d9ab8cdab396415ea77c9041a53e3acbb5#diff-68e8e61267696ad4397942e952fefc8c22627a0d7203fcf8cf08534a086d6220
+        if np.shape(np.shape(output))[0]==3:
+            output=cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
         return output
 
     def _pool_and_resize(self):
