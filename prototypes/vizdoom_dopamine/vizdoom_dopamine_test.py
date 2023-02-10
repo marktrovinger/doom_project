@@ -23,13 +23,13 @@ import gin.tf.external_configurables
 
 DQNAgent.gamma = 0.99
 DQNAgent.update_horizon = 1
-DQNAgent.min_replay_history = 200000  # agent steps
+DQNAgent.min_replay_history = 20000  # agent steps
 DQNAgent.update_period = 4
-DQNAgent.target_update_period = 100000  # agent steps
+DQNAgent.target_update_period = 10000  # agent steps
 DQNAgent.epsilon_train = 0.1
 DQNAgent.epsilon_eval = 0.05
-DQNAgent.epsilon_decay_period = 100000  # agent steps
-DQNAgent.tf_device = '/gpu:0'  # use '/cpu:*' for non-GPU version
+DQNAgent.epsilon_decay_period = 10000  # agent steps
+DQNAgent.tf_device = '/cpu:*' # use '/gpu:0' for GPU version
 DQNAgent.optimizer = @tf.train.RMSPropOptimizer()
 
 tf.train.RMSPropOptimizer.learning_rate = 0.00025
@@ -41,15 +41,15 @@ tf.train.RMSPropOptimizer.centered = True
 atari_lib.create_atari_environment.game_name = 'VizdoomHealthGatheringSupreme'
 #atari.create_atari_environment.sticky_actions = False
 create_agent.agent_name = 'dqn'
-Runner.num_iterations = 1
-Runner.training_steps = 500000  # agent steps
-Runner.evaluation_steps = 125000  # agent steps
-Runner.max_steps_per_episode = 27000  # agent steps
+Runner.num_iterations = 2
+Runner.training_steps = 50000  # agent steps
+Runner.evaluation_steps = 12000  # agent steps
+Runner.max_steps_per_episode = 7000  # agent steps
 
 AtariPreprocessing.terminal_on_life_loss = True
-AtariPreprocessing.frame_skip = 1
+AtariPreprocessing.frame_skip = 4
 
-WrappedReplayBuffer.replay_capacity = 1000000
+WrappedReplayBuffer.replay_capacity = 100000
 WrappedReplayBuffer.batch_size = 32
 """
 gin.parse_config(dqn_config, skip_unknown=False)
