@@ -36,8 +36,6 @@ Network types are namedtuples that define the output signature of the networks
 used. Please use the appropriate signature as needed when defining new networks.
 """
 
-# PMMOD: copy to /Users/perusha/git_repos/dopamine/dopamine/discrete_domains
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -480,7 +478,10 @@ class AtariPreprocessing(object):
             # We max-pool over the last two frames, in grayscale.
             if time_step >= self.frame_skip - 2:
                 t = time_step - (self.frame_skip - 2)
-                self._fetch_grayscale_observation(self.screen_buffer[t])
+                # self._fetch_grayscale_observation(self.screen_buffer[t])
+                # PMMOD...ale handles this for Atari so need to handle for Vizdoom
+                out = self._fetch_grayscale_observation(obs['screen'])
+                self.screen_buffer[t] = out
 
             if is_terminal:
                 break
@@ -502,9 +503,8 @@ class AtariPreprocessing(object):
         Returns:
           observation: numpy array, the current observation in grayscale.
         """
-        # PMMOD: Copied from https://github.com/KatyNTsachi/Hierarchical-RL/commit
-        # /40e995d9ab8cdab396415ea77c9041a53e3acbb5#diff-68e8e61267696ad4397942e952fefc8c22627a0d7203fcf8cf08534a086d6220
-        # self.environment.ale.getScreenGrayscale(output)   # original code
+        # self.environment.ale.getScreenGrayscale(output)
+        # Copied from https://github.com/KatyNTsachi/Hierarchical-RL/commit/40e995d9ab8cdab396415ea77c9041a53e3acbb5#diff-68e8e61267696ad4397942e952fefc8c22627a0d7203fcf8cf08534a086d6220
         if np.shape(np.shape(output))[0]==3:
             output=cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
         return output
