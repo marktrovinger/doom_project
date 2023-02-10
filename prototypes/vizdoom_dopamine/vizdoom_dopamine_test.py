@@ -29,7 +29,7 @@ DQNAgent.target_update_period = 10000  # agent steps
 DQNAgent.epsilon_train = 0.1
 DQNAgent.epsilon_eval = 0.05
 DQNAgent.epsilon_decay_period = 10000  # agent steps
-DQNAgent.tf_device = '/cpu:*' # use '/gpu:0' for GPU version
+DQNAgent.tf_device = '/gpu:0' # use '/cpu:*' for GPU version
 DQNAgent.optimizer = @tf.train.RMSPropOptimizer()
 
 tf.train.RMSPropOptimizer.learning_rate = 0.00025
