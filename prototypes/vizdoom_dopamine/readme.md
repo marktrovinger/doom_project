@@ -15,9 +15,11 @@ Plus gym wrappers:
 Test installation: 
 ```run vizdoom_wrapper_test ```
 
-3. Copy/override atari_lib file in dopamine/dopamine/discrete_domains with file provided 
-4. Run vizdoom_dopamine_test
+3. Copy/override atari_lib file in dopamine/dopamine/discrete_domains with file provided <br>
+This is a quick and dirty work-around; ideally we should create the vizdoom_lib file and figure out how to get dopamine to see it without the ambiguity error it comes up with. <br>
 
+4. Run vizdoom_dopamine_test <br>
+Even though the vizdoom wrapper runs in this conda env, the code was not picking up the vizdoom envs as registered so manually registering for now. <br>
 Note that only two gym envs are registered in this test code (manually registered) <br>
    ```
    register(
