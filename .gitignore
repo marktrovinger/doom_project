@@ -132,6 +132,11 @@ dmypy.json
 /wads
 /scenarios
 
-macOS
+# macOS
 .DS_Store
 .idea
+
+#
+*.gz
+*.pkl
+*.pth
