@@ -1,47 +1,36 @@
-#!/usr/bin/env python3
-
-#####################################################################
-# Example script of training agents with stable-baselines3
-# on ViZDoom using the Gym API
-#
-# Note: ViZDoom must be installed with optional gym dependencies:
-#         pip install vizdoom[gym]
-#       You also need stable-baselines3:
-#         pip install stable-baselines3
-#
-# See more stable-baselines3 documentation here:
-#   https://stable-baselines3.readthedocs.io/en/master/index.html
-#####################################################################
-
 from argparse import ArgumentParser
 
 import cv2
-import gym
+import gymnasium
 import numpy as np
-from stable_baselines3 import DQN
+from stable_baselines3 import PPO
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.env_util import make_vec_env
+import wandb
+from wandb.integration.sb3 import WandbCallback
 
-import vizdoom.gym_wrapper  # noqa
+import vizdoom.gymnasium_wrapper  # noqa
 
 
 DEFAULT_ENV = "VizdoomBasic-v0"
 """
 AVAILABLE_ENVS = [
     env
-    for env in [env_spec.id for env_spec in gym.envs.registry.all()]
+    for env in [env_spec.id for env_spec in gymnasium.envs.registry.all()]
     if "Vizdoom" in env
 ]
 """
 # Height and width of the resized image
-IMAGE_SHAPE = (60, 45)
+IMAGE_SHAPE = (60, 80)
 
 # Training parameters
-TRAINING_TIMESTEPS = int(6e5)
+TRAINING_TIMESTEPS = int(1e6)
 N_STEPS = 128
 N_ENVS = 8
 FRAME_SKIP = 4
 
 
-class ObservationWrapper(gym.ObservationWrapper):
+class ObservationWrapper(gymnasium.ObservationWrapper):
     """
     ViZDoom environments return dictionaries as observations, containing
     the main image as well other info.
@@ -63,7 +52,7 @@ class ObservationWrapper(gym.ObservationWrapper):
         # Create new observation space with the new shape
         num_channels = env.observation_space["screen"].shape[-1]
         new_shape = (shape[0], shape[1], num_channels)
-        self.observation_space = gym.spaces.Box(0, 255, shape=new_shape, dtype=np.uint8)
+        self.observation_space = gymnasium.spaces.Box(0, 255, shape=new_shape, dtype=np.uint8)
 
     def observation(self, observation):
         observation = cv2.resize(observation["screen"], self.image_shape_reverse)
@@ -78,23 +67,38 @@ def main(args):
     #     This may lead to unstable learning, and we scale the rewards by 1/100
     def wrap_env(env):
         env = ObservationWrapper(env)
-        env = gym.wrappers.TransformReward(env, lambda r: r * 0.01)
+        env = gymnasium.wrappers.TransformReward(env, lambda r: r * 0.01)
+        env = Monitor(env)
         return env
+    
+    config = {
+        "policy_type": "CnnPolicy",
+        "total_timesteps": int(1e6),
+        "env_name": "VizdoomBasic-v0",
+    }
+    run = wandb.init(
+        project="doom_basic_PPO_sb3",
+        config=config,
+        sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
+        monitor_gym=True,  # auto-upload the videos of agents playing the game
+        save_code=True,  # optional
+    )
 
-    env = gym.make(DEFAULT_ENV)
-    env = wrap_env(env)
+    envs = make_vec_env(args.env, n_envs=N_ENVS, wrapper_class=wrap_env)
 
-    agent = DQN("CnnPolicy", env, verbose=1)
+    agent = PPO("CnnPolicy", envs, n_steps=N_STEPS, verbose=1, tensorboard_log=f"runs/{run.id}")
 
     # Do the actual learning
     # This will print out the results in the console.
     # If agent gets better, "ep_rew_mean" should increase steadily
-    agent.learn(total_timesteps=TRAINING_TIMESTEPS)
-
-    obs = agent.replay_buffer.observations
-    actions = agent.replay_buffer.actions
-    rewards = agent.replay_buffer.rewards
-    dones = agent.replay_buffer.dones
+    agent.learn(total_timesteps=TRAINING_TIMESTEPS,
+                callback=WandbCallback(
+                gradient_save_freq=100,
+                model_save_path=f"models/{run.id}",
+                verbose=2,
+        ),
+    )
+    run.finish()
 
 
 if __name__ == "__main__":
